@@ -1021,13 +1021,47 @@
   }, {threshold:.12, rootMargin:"0px 0px -8% 0px"});
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // Form (front-end only — no backend wired up)
+  // Form → Google Apps Script (logs to Sheet + emails mohit@incite.studio)
+  const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwpVmE2bjN2f8WNGw5bbJMurdYg5sBx9TXJ2-QBA6oICJLvnHM38XiwFD2gYhh4b88p/exec";
   const form = document.getElementById('consultForm');
+  const formBtn = form.querySelector('.form-submit');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!form.checkValidity()){ form.reportValidity(); return; }
-    form.style.display = 'none';
-    document.getElementById('formSuccess').classList.add('show');
+
+    const val = (id) => (document.getElementById(id)?.value || '').trim();
+    const timeline = val('timeline');
+    const hear = val('hear');
+    const projectText = val('project');
+    const messageParts = [];
+    if (projectText) messageParts.push(projectText);
+    if (timeline) messageParts.push('Timeline: ' + timeline);
+    if (hear) messageParts.push('Heard via: ' + hear);
+
+    const payload = {
+      name: val('name'),
+      email: val('email'),
+      company: val('company'),
+      message: messageParts.join('\n')
+    };
+
+    formBtn.disabled = true;
+    formBtn.textContent = 'Sending…';
+
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+    })
+    .catch(() => {
+      formBtn.disabled = false;
+      formBtn.textContent = 'Contact us →';
+      alert("Something went wrong sending your message. Please email mohit@incite.studio directly.");
+    });
   });
 </script>
 </body>
