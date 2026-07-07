@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incite Studio</title>
+<meta name="description" content="A digital services and data science consultancy. Creativity and analysis to find what works in a modern media landscape.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Expanded:wght@600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Palette — ink base with the studio's coral→violet→azure plume as accent */
+    --ink:        #15151a;
+    --ink-soft:   #1f1f27;
+    --ink-line:   #2b2b35;
+    --paper:      #f6f5f2;
+    --paper-2:    #ecebe6;
+    --fog:        #9a9aa6;
+    --fog-2:      #6c6c78;
+    --coral:      #f0795f;
+    --magenta:    #d05a93;
+    --violet:     #8a6bd6;
+    --azure:      #6f8fe0;
+    --line-light: #dedcd5;
+
+    --serif: "Newsreader", Georgia, serif;
+    --sans:  "Archivo", system-ui, sans-serif;
+    --wide:  "Archivo Expanded", "Archivo", sans-serif;
+    --mono:  "IBM Plex Mono", monospace;
+
+    --maxw: 1240px;
+    --pad: clamp(20px, 5vw, 64px);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  ::selection{background:var(--violet);color:#fff;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad);}
+
+  /* ---------- utility type ---------- */
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--fog-2);
+    display:inline-flex;
+    align-items:center;
+    gap:.6em;
+  }
+  .eyebrow::before{
+    content:"";
+    width:26px;height:1px;
+    background:currentColor;
+    display:inline-block;
+    opacity:.6;
+  }
+
+  /* =====================================================
+     NAV
+  ===================================================== */
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(21,21,26,0);
+    transition:background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.nav.scrolled{
+    background:rgba(21,21,26,.86);
+    backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid var(--ink-line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);margin:0 auto;
+    padding:18px var(--pad);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand img{height:56px;width:auto;opacity:.96;}
+  .brand .bsub{
+    font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--fog);
+    padding-left:11px;border-left:1px solid var(--ink-line);
+  }
+  nav.links{display:flex;align-items:center;gap:34px;}
+  nav.links a{
+    font-size:14px;color:#cfcfd6;letter-spacing:.01em;
+    transition:color .2s;position:relative;
+  }
+  nav.links a:hover{color:#fff;}
+  .nav-cta{
+    font-size:13.5px;font-weight:500;
+    color:var(--ink)!important;background:var(--paper);
+    padding:9px 18px;border-radius:2px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(208,90,147,.35);color:var(--ink)!important;}
+  .nav-toggle{display:none;background:none;border:0;cursor:pointer;padding:6px;}
+  .nav-toggle span{display:block;width:22px;height:2px;background:#e8e8ee;margin:4px 0;transition:.3s;}
+
+  /* =====================================================
+     HERO — signature: influence equation
+  ===================================================== */
+  .hero{
+    position:relative;
+    background:var(--ink);
+    color:var(--paper);
+    padding-top:clamp(150px, 22vh, 230px);
+    padding-bottom:clamp(70px, 11vh, 130px);
+    overflow:hidden;
+  }
+  .plume{
+    position:absolute;
+    right:-10%;bottom:-30%;
+    width:min(80vw, 920px);height:min(80vw, 920px);
+    background:
+      radial-gradient(closest-side at 62% 58%, rgba(240,121,95,.55), rgba(240,121,95,0) 70%),
+      radial-gradient(closest-side at 40% 65%, rgba(208,90,147,.50), rgba(208,90,147,0) 72%),
+      radial-gradient(closest-side at 52% 40%, rgba(138,107,214,.42), rgba(138,107,214,0) 72%),
+      radial-gradient(closest-side at 30% 45%, rgba(111,143,224,.40), rgba(111,143,224,0) 72%);
+    filter:blur(8px);
+    pointer-events:none;
+    animation:drift 22s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(-40px,-26px) scale(1.06);}
+  }
+  .hero .wrap{position:relative;z-index:2;}
+
+  .hero h1{
+    font-family:var(--wide);
+    font-weight:800;
+    font-size:clamp(2.6rem, 6.4vw, 5.4rem);
+    line-height:.97;
+    letter-spacing:-.01em;
+    margin:26px 0 0;
+    max-width:16ch;
+  }
+  .hero h1 .em{
+    font-family:var(--serif);
+    font-weight:500;
+    font-style:italic;
+    letter-spacing:0;
+    background:linear-gradient(92deg,var(--coral),var(--magenta) 42%,var(--violet) 78%,var(--azure));
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    padding-right:.08em;
+  }
+  .hero .lede{
+    margin:30px 0 0;
+    font-size:clamp(1.05rem,1.7vw,1.32rem);
+    line-height:1.55;
+    color:#c9c9d2;
+    max-width:54ch;
+    font-weight:400;
+  }
+  .hero .lede b{color:var(--paper);font-weight:600;}
+
+  .hero-cta-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:40px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:15px;font-weight:600;letter-spacing:.01em;
+    padding:14px 26px;border-radius:2px;
+    transition:transform .22s ease, box-shadow .22s ease, background .22s;
+    cursor:pointer;border:0;font-family:var(--sans);
+  }
+  .btn-primary{
+    background:linear-gradient(92deg,var(--coral),var(--magenta) 55%,var(--violet));
+    color:#fff;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(208,90,147,.4);}
+  .btn-ghost{background:transparent;color:var(--paper);border:1px solid var(--ink-line);}
+  .btn-ghost:hover{border-color:var(--fog);transform:translateY(-2px);}
+  .btn .arr{transition:transform .22s;}
+  .btn:hover .arr{transform:translate(3px,0);}
+
+  /* the equation strip */
+  .equation{
+    margin-top:clamp(54px,8vh,92px);
+    padding-top:34px;
+    border-top:1px solid var(--ink-line);
+    display:flex;align-items:stretch;flex-wrap:wrap;
+    gap:clamp(8px,2vw,30px);
+  }
+  .eq-term{flex:1 1 200px;min-width:170px;}
+  .eq-term .k{
+    font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--fog);
+  }
+  .eq-term .v{
+    font-family:var(--wide);font-weight:700;
+    font-size:clamp(1.3rem,2.5vw,2rem);
+    margin-top:9px;line-height:1.05;
+  }
+  .eq-term .d{font-size:13.5px;color:var(--fog-2);margin-top:8px;line-height:1.45;max-width:30ch;}
+  .eq-op{
+    align-self:center;
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(1.6rem,3vw,2.4rem);
+    color:var(--violet);
+    padding:0 4px;
+  }
+  .eq-term.result .v{
+    background:linear-gradient(92deg,var(--coral),var(--magenta) 50%,var(--violet));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+
+  /* =====================================================
+     CLIENT LOGOS / MARQUEE
+  ===================================================== */
+  .clients{background:var(--ink);color:var(--paper);padding:clamp(40px,7vh,80px) 0 clamp(56px,9vh,100px);}
+  .clients .label{
+    text-align:center;font-family:var(--mono);font-size:11.5px;
+    letter-spacing:.24em;text-transform:uppercase;color:var(--fog);
+    margin-bottom:38px;
+  }
+  .logo-row{
+    display:flex;align-items:center;justify-content:center;
+    flex-wrap:wrap;
+    gap:clamp(12px,1.5vw,20px);
+    max-width:1140px;margin-inline:auto;
+  }
+  /* Each logo sits on a uniform light chip, in its real brand colors,
+     so mismatched colored logos read crisply on the dark band. */
+  .logo-chip{
+    background:var(--paper);
+    border-radius:8px;
+    height:96px;
+    width:clamp(150px,14vw,210px);
+    display:flex;align-items:center;justify-content:center;
+    padding:0 20px;
+    flex:0 0 auto;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .logo-chip:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(0,0,0,.28);}
+  .logo-chip img{
+    max-width:100%;
+    width:auto;height:auto;
+    object-fit:contain;
+    display:block;
+  }
+  /* Per-logo sizing — tuned to each mark's aspect ratio so they read at
+     consistent visual weight (wide/thin logos run wider, chunky ones shorter). */
+  .logo-chip img.l-amazon{max-height:46px;}
+  .logo-chip img.l-fellow{max-height:54px;}
+  .logo-chip img.l-vpc{max-height:62px;}
+  .logo-chip img.l-mts{max-height:60px;}
+  .logo-chip img.l-bii{max-height:30px;max-width:none;width:calc(100% - 6px);}
+  .clients .more{
+    text-align:center;margin-top:40px;font-size:13px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--fog-2);font-family:var(--mono);
+  }
+  @media (max-width:560px){
+    .logo-chip{height:74px;width:clamp(136px,43vw,170px);padding:0 16px;}
+    .logo-chip img.l-amazon{max-height:36px;}
+    .logo-chip img.l-fellow{max-height:42px;}
+    .logo-chip img.l-vpc{max-height:48px;}
+    .logo-chip img.l-mts{max-height:46px;}
+    .logo-chip img.l-bii{max-height:24px;}
+  }
+
+  /* =====================================================
+     SECTION SHELL
+  ===================================================== */
+  section{padding-block:clamp(72px,11vh,140px);}
+  .sec-head{max-width:62ch;}
+  .sec-head h2{
+    font-family:var(--wide);font-weight:700;
+    font-size:clamp(1.9rem,3.8vw,3.1rem);
+    line-height:1.04;letter-spacing:-.01em;
+    margin:20px 0 0;
+  }
+  .sec-head h2 .ital{font-family:var(--serif);font-style:italic;font-weight:500;}
+  .sec-head p.intro{
+    font-size:clamp(1.05rem,1.5vw,1.22rem);
+    color:var(--fog-2);margin-top:22px;line-height:1.6;max-width:56ch;
+  }
+
+  /* ABOUT / belief */
+  .about{background:var(--paper);}
+  .belief-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;background:var(--line-light);
+    border:1px solid var(--line-light);
+    margin-top:56px;border-radius:3px;overflow:hidden;
+  }
+  .belief{background:var(--paper);padding:34px 30px 38px;}
+  .belief .n{
+    font-family:var(--mono);font-size:12px;color:var(--magenta);
+    letter-spacing:.12em;
+  }
+  .belief h3{
+    font-family:var(--sans);font-weight:700;font-size:1.16rem;
+    margin:16px 0 10px;line-height:1.25;letter-spacing:-.01em;
+  }
+  .belief p{font-size:15px;color:var(--fog-2);line-height:1.58;margin:0;}
+
+  /* =====================================================
+     METHOD — the abstracted agile loop (no client named)
+  ===================================================== */
+  .method{background:var(--ink);color:var(--paper);}
+  .method .sec-head h2{color:var(--paper);}
+  .method .sec-head p.intro{color:#b8b8c2;}
+  .method .eyebrow{color:var(--fog);}
+
+  .inf-grid{
+    margin-top:60px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;background:var(--ink-line);
+    border:1px solid var(--ink-line);border-radius:3px;overflow:hidden;
+  }
+  .inf{
+    background:var(--ink);padding:30px 26px 34px;position:relative;
+    transition:background .3s;
+  }
+  .inf:hover{background:var(--ink-soft);}
+  .inf .si{
+    font-family:var(--mono);font-size:12px;color:var(--fog);
+    letter-spacing:.18em;display:flex;align-items:center;gap:10px;
+  }
+  .inf .si .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:linear-gradient(135deg,var(--coral),var(--violet));
+  }
+  .inf h3{
+    font-family:var(--wide);font-weight:600;
+    font-size:1.18rem;margin:18px 0 12px;line-height:1.1;
+    letter-spacing:-.005em;
+  }
+  .inf p{font-size:14.5px;color:#a9a9b4;line-height:1.56;margin:0;}
+
+  /* outcome stats */
+  .outcomes{
+    margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);
+    gap:clamp(24px,4vw,56px);
+  }
+  .outcome .num{
+    font-family:var(--wide);font-weight:800;
+    font-size:clamp(2.4rem,5vw,3.8rem);line-height:1;
+    background:linear-gradient(110deg,var(--coral),var(--magenta) 50%,var(--violet));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    letter-spacing:-.02em;
+  }
+  .outcome .lab{
+    margin-top:14px;font-size:15px;color:#b8b8c2;line-height:1.5;
+    padding-top:14px;border-top:1px solid var(--ink-line);
+  }
+
+  /* featured research callout */
+  .research{
+    margin-top:clamp(40px,6vh,64px);
+    position:relative;
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--ink-line);
+    border-radius:6px;
+    padding:clamp(26px,3.5vw,40px) clamp(26px,4vw,46px);
+    overflow:hidden;
+  }
+  .research::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:linear-gradient(180deg,var(--coral),var(--magenta) 50%,var(--violet));
+  }
+  .research-tag{
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--fog);margin-bottom:16px;
+  }
+  .research-lead{
+    font-family:var(--serif);font-size:clamp(1.15rem,1.9vw,1.5rem);
+    line-height:1.42;color:var(--paper);margin:0;max-width:60ch;
+    font-weight:400;
+  }
+  .research-as{
+    display:flex;flex-wrap:wrap;align-items:center;
+    gap:14px clamp(28px,4vw,52px);margin-top:24px;
+  }
+  .research-as .ra-item{
+    display:flex;align-items:center;gap:14px;
+  }
+  .research-as .ra-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--fog-2);white-space:nowrap;
+  }
+  .research-as .ra-wired{
+    height:20px;width:auto;opacity:.92;
+  }
+  .research-as .ra-bii{
+    display:inline-flex;align-items:center;
+    background:var(--paper);border-radius:5px;
+    padding:8px 14px;height:36px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .research-as .ra-bii:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.28);}
+  .research-as .ra-bii img{height:15px;width:auto;display:block;}
+  .research-links{
+    display:flex;flex-wrap:wrap;gap:28px;margin-top:24px;
+  }
+  .research-links a{
+    font-family:var(--sans);font-size:15px;font-weight:600;
+    display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(92deg,var(--coral),var(--violet));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    transition:opacity .2s;
+  }
+  .research-links a .arr{-webkit-text-fill-color:var(--magenta);transition:transform .2s;}
+  .research-links a:hover{opacity:.8;}
+  .research-links a:hover .arr{transform:translateX(3px);}
+  .research-credit{
+    margin:22px 0 0;font-size:13px;color:var(--fog-2);line-height:1.5;
+    padding-top:18px;border-top:1px solid var(--ink-line);
+  }
+
+  /* =====================================================
+     CAPABILITIES
+  ===================================================== */
+  .caps{background:var(--paper-2);}
+  .cap-grid{
+    margin-top:54px;display:grid;grid-template-columns:repeat(2,1fr);
+    gap:20px;
+  }
+  .cap{
+    background:var(--paper);border:1px solid var(--line-light);
+    border-radius:3px;padding:30px 30px 32px;
+    display:flex;gap:22px;align-items:flex-start;
+    transition:transform .25s, box-shadow .25s, border-color .25s;
+  }
+  .cap:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(21,21,26,.08);border-color:#cfcdc4;}
+  .cap .ix{
+    font-family:var(--mono);font-size:13px;color:var(--magenta);
+    flex:0 0 auto;padding-top:3px;letter-spacing:.04em;
+  }
+  .cap h3{font-family:var(--sans);font-weight:700;font-size:1.12rem;margin:0 0 9px;letter-spacing:-.01em;}
+  .cap p{font-size:14.5px;color:var(--fog-2);line-height:1.55;margin:0;}
+
+  /* =====================================================
+     FOUNDER + TEAM
+  ===================================================== */
+  .team{background:var(--paper);}
+  .founder{
+    margin-top:54px;
+    display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(30px,5vw,70px);
+    align-items:center;
+  }
+  .founder-card{
+    background:var(--ink);border-radius:6px;overflow:hidden;
+    aspect-ratio:4/5;position:relative;
+  }
+  .founder-photo{
+    width:100%;height:100%;
+    object-fit:cover;object-position:center 20%;
+    display:block;
+  }
+  .founder-info .role{
+    font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--magenta);
+  }
+  .founder-info h3{
+    font-family:var(--wide);font-weight:700;
+    font-size:clamp(1.8rem,3.4vw,2.6rem);margin:14px 0 0;
+    letter-spacing:-.01em;line-height:1;
+  }
+  .founder-info .bio{font-size:15.5px;color:var(--fog-2);line-height:1.62;margin-top:20px;}
+  .founder-info .bio b{color:var(--ink);font-weight:600;}
+  .prior{
+    margin-top:22px;display:flex;flex-wrap:wrap;gap:9px;
+  }
+  .prior .chip{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+    border:1px solid var(--line-light);border-radius:100px;
+    padding:6px 13px;color:var(--fog-2);
+  }
+
+  .team-grid{
+    margin-top:64px;display:grid;grid-template-columns:repeat(2,1fr);gap:24px 40px;
+  }
+  .member{
+    border-top:2px solid var(--ink);padding-top:22px;
+  }
+  .member .mhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .member h4{font-family:var(--sans);font-weight:700;font-size:1.18rem;margin:0;letter-spacing:-.01em;}
+  .member .mrole{
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--magenta);margin-top:4px;
+  }
+  .member p{font-size:14px;color:var(--fog-2);line-height:1.56;margin:14px 0 0;}
+
+  /* =====================================================
+     CTA / CONTACT
+  ===================================================== */
+  .contact{background:var(--ink);color:var(--paper);position:relative;overflow:hidden;}
+  .contact .cplume{
+    position:absolute;left:-15%;top:-40%;
+    width:min(70vw,760px);height:min(70vw,760px);
+    background:
+      radial-gradient(closest-side at 50% 55%, rgba(208,90,147,.4), transparent 70%),
+      radial-gradient(closest-side at 65% 40%, rgba(240,121,95,.35), transparent 72%),
+      radial-gradient(closest-side at 40% 60%, rgba(111,143,224,.32), transparent 72%);
+    filter:blur(10px);pointer-events:none;
+  }
+  .contact .wrap{position:relative;z-index:2;}
+  .contact-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,80px);
+    align-items:start;
+  }
+  .contact h2{
+    font-family:var(--wide);font-weight:800;
+    font-size:clamp(2.1rem,4.6vw,3.6rem);line-height:1;letter-spacing:-.01em;margin:18px 0 0;
+  }
+  .contact h2 .ital{font-family:var(--serif);font-style:italic;font-weight:500;
+    background:linear-gradient(92deg,var(--coral),var(--violet));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .contact .csub{color:#b8b8c2;font-size:1.08rem;line-height:1.6;margin-top:22px;max-width:42ch;}
+  .contact .cmeta{margin-top:34px;display:flex;flex-direction:column;gap:16px;}
+  .contact .cmeta .row{display:flex;align-items:center;gap:14px;}
+  .contact .cmeta .row .ck{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--fog);width:74px;flex:0 0 auto;
+  }
+  .contact .cmeta .row a, .contact .cmeta .row span{font-size:15.5px;color:var(--paper);}
+  .contact .cmeta .row a:hover{color:var(--coral);}
+
+  /* form */
+  .form-card{
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--ink-line);
+    border-radius:5px;padding:clamp(26px,3vw,38px);
+    backdrop-filter:blur(6px);
+  }
+  .form-card .ftitle{font-family:var(--wide);font-weight:600;font-size:1.15rem;margin:0 0 4px;}
+  .form-card .fnote{font-size:13px;color:var(--fog);margin:0 0 24px;}
+  .field{margin-bottom:18px;}
+  .field label{
+    display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--fog);margin-bottom:8px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;background:rgba(255,255,255,.04);
+    border:1px solid var(--ink-line);border-radius:3px;
+    color:var(--paper);font-family:var(--sans);font-size:15px;
+    padding:12px 14px;transition:border-color .2s, background .2s;
+  }
+  .field input::placeholder, .field textarea::placeholder{color:#5a5a66;}
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none;border-color:var(--violet);background:rgba(255,255,255,.06);
+  }
+  .field textarea{resize:vertical;min-height:84px;}
+  .field select{appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239a9aa6' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;}
+  .field option{background:var(--ink);color:var(--paper);}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-submit{
+    width:100%;justify-content:center;margin-top:6px;
+    background:linear-gradient(92deg,var(--coral),var(--magenta) 55%,var(--violet));
+    color:#fff;font-weight:600;font-size:15px;padding:15px;border-radius:3px;border:0;cursor:pointer;
+    transition:transform .2s, box-shadow .2s;font-family:var(--sans);
+  }
+  .form-submit:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(208,90,147,.35);}
+  .form-foot{font-size:12px;color:var(--fog-2);margin-top:14px;text-align:center;font-family:var(--mono);letter-spacing:.03em;}
+  .form-success{
+    display:none;text-align:center;padding:30px 10px;
+  }
+  .form-success.show{display:block;}
+  .form-success .big{font-family:var(--wide);font-weight:700;font-size:1.6rem;
+    background:linear-gradient(92deg,var(--coral),var(--violet));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .form-success p{color:#b8b8c2;font-size:14.5px;margin-top:12px;}
+
+  /* =====================================================
+     FOOTER
+  ===================================================== */
+  footer.site{background:var(--ink);color:var(--paper);border-top:1px solid var(--ink-line);padding:46px 0 38px;}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+  .foot-inner .brand img{height:48px;opacity:.9;}
+  .foot-links{display:flex;gap:26px;flex-wrap:wrap;}
+  .foot-links a{font-size:13.5px;color:#b0b0ba;}
+  .foot-links a:hover{color:#fff;}
+  .copy{font-family:var(--mono);font-size:11.5px;color:var(--fog-2);letter-spacing:.04em;width:100%;margin-top:10px;}
+
+  /* =====================================================
+     REVEAL ANIMATION
+  ===================================================== */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+  .reveal.d1{transition-delay:.07s;}
+  .reveal.d2{transition-delay:.14s;}
+  .reveal.d3{transition-delay:.21s;}
+  .reveal.d4{transition-delay:.28s;}
+
+  /* =====================================================
+     RESPONSIVE
+  ===================================================== */
+  @media (max-width:980px){
+    .belief-grid{grid-template-columns:1fr;}
+    .inf-grid{grid-template-columns:1fr 1fr;}
+    .outcomes{grid-template-columns:1fr;gap:28px;}
+    .cap-grid{grid-template-columns:1fr;}
+    .founder{grid-template-columns:1fr;}
+    .founder-card{aspect-ratio:16/10;max-width:460px;}
+    .team-grid{grid-template-columns:1fr;gap:30px;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:720px){
+    nav.links{
+      position:fixed;inset:0 0 auto 0;top:0;
+      background:var(--ink);flex-direction:column;align-items:flex-start;
+      padding:90px var(--pad) 36px;gap:22px;
+      transform:translateY(-100%);transition:transform .4s cubic-bezier(.2,.7,.2,1);
+      border-bottom:1px solid var(--ink-line);
+    }
+    nav.links.open{transform:translateY(0);}
+    nav.links a{font-size:1.2rem;}
+    .nav-toggle{display:block;z-index:120;}
+    .nav-toggle.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .nav-toggle.open span:nth-child(2){opacity:0;}
+    .nav-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+    .equation{flex-direction:column;gap:18px;align-items:flex-start;}
+    .eq-op{align-self:flex-start;}
+    .inf-grid{grid-template-columns:1fr;}
+    .f2{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand" aria-label="Incite Studio home">
+      <img id="navlogo" src="assets/incite-white.png" alt="Incite Studio">
+      <span class="bsub">Research &amp; Analytics</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#influence">Influence</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#team">Team</a>
+      <a href="#contact" class="nav-cta">Let's talk</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="plume" aria-hidden="true"></div>
+  <div class="wrap">
+    <span class="eyebrow reveal">Data science &amp; digital strategy</span>
+    <h1 class="reveal d1">Data science for <span class="em">modern persuasion.</span></h1>
+    <p class="lede reveal d2">Strategy, advice, and the tools to act on both.</p>
+    <div class="hero-cta-row reveal d3">
+      <a href="#contact" class="btn btn-primary">Start a conversation <span class="arr">→</span></a>
+      <a href="#capabilities" class="btn btn-ghost">See what we do</a>
+    </div>
+
+    <!-- signature: the influence equation -->
+    <div class="equation reveal d4" aria-label="Influence equals persuasion times engagement">
+      <div class="eq-term">
+        <div class="k">We model influence as</div>
+        <div class="v">Persuasion</div>
+      </div>
+      <div class="eq-op">×</div>
+      <div class="eq-term">
+        <div class="k">multiplied by</div>
+        <div class="v">Engagement</div>
+      </div>
+      <div class="eq-op">=</div>
+      <div class="eq-term result">
+        <div class="k">measured and optimized</div>
+        <div class="v">Influence</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLIENTS ============ -->
+<section class="clients">
+  <div class="wrap">
+    <p class="label reveal">Proud to partner with</p>
+    <div class="logo-row reveal d1">
+      <div class="logo-chip"><img class="l-amazon" src="assets/amazon.png" alt="Amazon"></div>
+      <div class="logo-chip"><img class="l-fellow" src="assets/fellow-americans.png" alt="Fellow Americans"></div>
+      <div class="logo-chip"><img class="l-vpc" src="assets/vpc.png" alt="Voter Participation Center"></div>
+      <div class="logo-chip"><img class="l-mts" src="assets/made-to-save.png" alt="Made to Save"></div>
+      <div class="logo-chip"><img class="l-bii" src="assets/bii.png" alt="Better Internet Initiative"></div>
+    </div>
+    <p class="more reveal d2">And many more.</p>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Who we are</span>
+      <h2 class="reveal d1">A little better than the median <span class="ital">isn't good enough.</span></h2>
+      <p class="intro reveal d2">A digital services and data science consultancy. We advise on strategy, media, and platforms - and build the models and infrastructure to turn it into durable advantage.</p>
+    </div>
+
+    <div class="belief-grid">
+      <div class="belief reveal">
+        <div class="n">01</div>
+        <h3>Humility, then rigor</h3>
+        <p>Most creative doesn't work. Finding what does is the point.</p>
+      </div>
+      <div class="belief reveal d1">
+        <div class="n">02</div>
+        <h3>Why, not just what</h3>
+        <p>We find the mechanism, not just the winner.</p>
+      </div>
+      <div class="belief reveal d2">
+        <div class="n">03</div>
+        <h3>Knowledge that compounds</h3>
+        <p>Every engagement sharpens the next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INFLUENCE & ATTENTION ============ -->
+<section class="method" id="influence">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Influence &amp; attention</span>
+      <h2 class="reveal d1">Influence is shifting. <span class="ital">We help you move with it.</span></h2>
+      <p class="intro reveal d2">Independent media now rivals traditional advertising. We help organizations, foundations, and investors put attention where it compounds.</p>
+    </div>
+
+    <div class="inf-grid">
+      <div class="inf reveal">
+        <div class="si"><span class="dot"></span>01</div>
+        <h3>Paid media &amp; platform strategy</h3>
+        <p>Where to invest, and how platforms and their recommendation systems actually move reach.</p>
+      </div>
+      <div class="inf reveal d1">
+        <div class="si"><span class="dot"></span>02</div>
+        <h3>Independent media &amp; creators</h3>
+        <p>Engage the creators your audience already trusts - from emerging voices to the well-established.</p>
+      </div>
+      <div class="inf reveal d2">
+        <div class="si"><span class="dot"></span>03</div>
+        <h3>Persuasiveness modeling</h3>
+        <p>Who is a trusted messenger, and for the messages you actually care about.</p>
+      </div>
+      <div class="inf reveal d3">
+        <div class="si"><span class="dot"></span>04</div>
+        <h3>Testing &amp; longitudinal tracking</h3>
+        <p>Assess what works, and follow how influence grows over time.</p>
+      </div>
+    </div>
+
+    <div class="outcomes">
+      <div class="outcome reveal">
+        <div class="num">10M+</div>
+        <div class="lab">Independent creators in America.</div>
+      </div>
+      <div class="outcome reveal d1">
+        <div class="num">13%</div>
+        <div class="lab">Annual growth, as traditional media contracts.</div>
+      </div>
+      <div class="outcome reveal d2">
+        <div class="num">#1</div>
+        <div class="lab">Platforms now outpace traditional advertising.</div>
+      </div>
+    </div>
+
+    <div class="research reveal">
+      <div class="research-tag">Featured research</div>
+      <p class="research-lead">The first academic field study on how digital creators persuade. Our founder co-authored new research with Columbia showing that cultural creators had an outsized effect on public perception in 2024.</p>
+      <div class="research-as">
+        <div class="ra-item">
+          <span class="ra-label">As previewed in</span>
+          <img class="ra-wired" src="assets/wired-white.png" alt="WIRED">
+        </div>
+        <div class="ra-item">
+          <span class="ra-label">In partnership with</span>
+          <a class="ra-bii" href="https://www.betterinternetinitiative.org" target="_blank" rel="noopener" aria-label="Better Internet Initiative">
+            <img src="assets/bii.png" alt="Better Internet Initiative">
+          </a>
+        </div>
+      </div>
+      <div class="research-links">
+        <a href="https://www.wired.com/story/the-most-powerful-politics-influencers-barely-post-about-politics/" target="_blank" rel="noopener">Read the preview <span class="arr">→</span></a>
+        <a href="https://arxiv.org/abs/2512.15401" target="_blank" rel="noopener">Read the full paper <span class="arr">→</span></a>
+      </div>
+      <p class="research-credit">With Tiffany Fisher-Love, and Columbia researchers John Marshall, Eunji Kim, and Kirill Chmel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAPABILITIES ============ -->
+<section class="caps" id="capabilities">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow reveal">What we do</span>
+      <h2 class="reveal d1">Strategy, backed by <span class="ital">the tools to deliver.</span></h2>
+      <p class="intro reveal d2">Engagements are built around what you need to know. They often include:</p>
+    </div>
+
+    <div class="cap-grid">
+      <div class="cap reveal">
+        <div class="ix">01</div>
+        <div>
+          <h3>Strategy &amp; advisory</h3>
+          <p>Media, platform, and investment strategy aligned to your goals.</p>
+        </div>
+      </div>
+      <div class="cap reveal d1">
+        <div class="ix">02</div>
+        <div>
+          <h3>Independent media &amp; creators</h3>
+          <p>Reach the creators your audience already trusts.</p>
+        </div>
+      </div>
+      <div class="cap reveal">
+        <div class="ix">03</div>
+        <div>
+          <h3>Models &amp; AI</h3>
+          <p>Persuasiveness models and AI workflows built for your questions.</p>
+        </div>
+      </div>
+      <div class="cap reveal d1">
+        <div class="ix">04</div>
+        <div>
+          <h3>Testing &amp; measurement</h3>
+          <p>Test what matters. Track what works over time.</p>
+        </div>
+      </div>
+      <div class="cap reveal">
+        <div class="ix">05</div>
+        <div>
+          <h3>Data infrastructure</h3>
+          <p>The systems that make all of it repeatable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEAM ============ -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow reveal">The studio</span>
+      <h2 class="reveal d1">Built by operators who've <span class="ital">done the work.</span></h2>
+    </div>
+
+    <!-- Founder -->
+    <div class="founder">
+      <div class="founder-card reveal">
+        <img class="founder-photo" src="assets/nate.webp" alt="Nathaniel Lubin">
+      </div>
+      <div class="founder-info reveal d1">
+        <div class="role">Founder &amp; CEO</div>
+        <h3>Nathaniel Lubin</h3>
+        <p class="bio">Former <b>Director of the Office of Digital Strategy at the White House</b> and <b>Director of Digital Marketing at Obama for America</b>. Harvard honors graduate.</p>
+        <div class="prior">
+          <span class="chip">The White House</span>
+          <span class="chip">Obama for America</span>
+          <span class="chip">Berkman Klein · Harvard</span>
+          <span class="chip">Cornell Digital Life</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team members -->
+    <div class="team-grid">
+      <div class="member reveal">
+        <div class="mhead"><h4>Martha Patzer</h4></div>
+        <div class="mrole">Data &amp; Analytics</div>
+        <p>Emerging-tech strategist. Formerly Vox Media and Neeva (acquired by Snowflake).</p>
+      </div>
+      <div class="member reveal d1">
+        <div class="mhead"><h4>Alex Barbieri</h4></div>
+        <div class="mrole">Data &amp; Analytics</div>
+        <p>Builds data infrastructure and runs meta-analysis programs.</p>
+      </div>
+      <div class="member reveal d2">
+        <div class="mhead"><h4>Mohit Mehta</h4></div>
+        <div class="mrole">Operations &amp; Finance</div>
+        <p>A decade in operations and finance across startups and venture studios; 7 years at Incite.</p>
+      </div>
+      <div class="member reveal d3">
+        <div class="mhead"><h4>Tiffany Fisher-Love</h4></div>
+        <div class="mrole">Managing Director, Better Internet Initiative</div>
+        <p>Leads BII's creative and substantive programming, and its relationships across partners and collaborators.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="cplume" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="contact-grid">
+      <div>
+        <span class="eyebrow reveal">Contact</span>
+        <h2 class="reveal d1">Let's <span class="ital">talk.</span></h2>
+        <p class="csub reveal d2">Tell us what you're working on.</p>
+      </div>
+
+      <div class="form-card reveal d2">
+        <p class="ftitle">Request a consultation</p>
+        <p class="fnote">Reviewed by senior team only.</p>
+        <form id="consultForm" novalidate>
+          <div class="f2">
+            <div class="field">
+              <label for="name">Name*</label>
+              <input id="name" name="name" type="text" placeholder="Your name" required>
+            </div>
+            <div class="field">
+              <label for="email">Work email*</label>
+              <input id="email" name="email" type="email" placeholder="you@company.com" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="company">Company / Organization*</label>
+            <input id="company" name="company" type="text" placeholder="Where you work" required>
+          </div>
+          <div class="field">
+            <label for="project">What are you working on?</label>
+            <textarea id="project" name="project" placeholder="A few sentences is perfect."></textarea>
+          </div>
+          <div class="f2">
+            <div class="field">
+              <label for="timeline">Timeline*</label>
+              <select id="timeline" name="timeline" required>
+                <option value="" disabled selected>Select…</option>
+                <option>ASAP</option>
+                <option>1 to 3 months</option>
+                <option>3 to 6 months</option>
+                <option>Just exploring</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="hear">How'd you hear about us?</label>
+              <select id="hear" name="hear">
+                <option value="" disabled selected>Optional</option>
+                <option>Referral</option>
+                <option>Search</option>
+                <option>Social</option>
+                <option>Event</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="form-submit">Contact us →</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <div class="big">All set.</div>
+          <p>Thanks. We'll be in touch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site">
+  <div class="wrap foot-inner">
+    <a href="#top" class="brand"><img id="footlogo" src="assets/incite-white.png" alt="Incite Studio"></a>
+    <div class="foot-links">
+      <a href="#about">About</a>
+      <a href="#influence">Influence</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#team">Team</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="copy">All content copyright © Incite Studio, LLC · 2026</div>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav background
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  // Mobile menu
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open'); toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  }));
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:.12, rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Form (front-end only — no backend wired up)
+  const form = document.getElementById('consultForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()){ form.reportValidity(); return; }
+    form.style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  });
+</script>
+</body>
+</html>
