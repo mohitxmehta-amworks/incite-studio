@@ -289,6 +289,41 @@
 
   /* ABOUT / belief */
   .about{background:var(--paper);}
+  /* Two-column intro: heading anchors left, body copy fills right so the
+     band doesn't read half-empty on wide screens. */
+  .about .sec-head{
+    max-width:none;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
+    column-gap:clamp(40px,6vw,90px);
+    align-items:start;
+  }
+  .about .sec-head .about-mark{
+    grid-column:1;
+    width:clamp(190px,20vw,270px);
+    height:auto;
+    display:block;
+    margin-top:18px;
+    margin-left:-6px;
+  }
+  .about .sec-head .eyebrow{grid-column:1;}
+  .about .sec-head h2{grid-column:1;max-width:16ch;}
+  .about .sec-head .about-copy{
+    grid-column:2;
+    grid-row:1 / span 4;
+    align-self:center;
+  }
+  .about .sec-head .about-copy p.intro{max-width:60ch;}
+  .about .sec-head .about-copy p.intro:first-child{margin-top:0;}
+  @media (max-width:860px){
+    .about .sec-head{grid-template-columns:1fr;}
+    .about .sec-head .about-mark,
+    .about .sec-head .eyebrow,
+    .about .sec-head h2,
+    .about .sec-head .about-copy{grid-column:1;}
+    .about .sec-head .about-copy{grid-row:auto;align-self:start;margin-top:22px;}
+    .about .sec-head h2{max-width:none;}
+  }
   .belief-grid{
     display:grid;grid-template-columns:repeat(3,1fr);
     gap:1px;background:var(--line-light);
@@ -367,7 +402,21 @@
     border-radius:6px;
     padding:clamp(26px,3.5vw,40px) clamp(26px,4vw,46px);
     overflow:hidden;
+    display:flex;
+    align-items:center;
+    gap:clamp(28px,4vw,52px);
   }
+  .research-body{flex:1 1 auto;min-width:0;}
+  .research-media{
+    flex:0 0 auto;
+    width:clamp(200px,22vw,280px);
+    display:block;border-radius:6px;overflow:hidden;
+    border:1px solid var(--ink-line);
+    box-shadow:0 18px 44px rgba(0,0,0,.4);
+    transition:transform .28s ease, box-shadow .28s ease;
+  }
+  .research-media:hover{transform:translateY(-4px);box-shadow:0 26px 60px rgba(0,0,0,.5);}
+  .research-media img{width:100%;height:auto;display:block;}
   .research::before{
     content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
     background:linear-gradient(180deg,var(--coral),var(--magenta) 50%,var(--violet));
@@ -578,6 +627,8 @@
     .cap-grid{grid-template-columns:1fr;}
     .team-grid{grid-template-columns:1fr;gap:30px;}
     .contact-grid{grid-template-columns:1fr;}
+    .research{flex-direction:column;align-items:flex-start;gap:28px;}
+    .research-media{width:100%;max-width:300px;align-self:center;}
   }
   @media (max-width:720px){
     nav.links{
@@ -595,6 +646,11 @@
     .nav-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
     .inf-grid{grid-template-columns:1fr;}
     .f2{grid-template-columns:1fr;}
+    section{padding-block:52px;}
+    .clients{padding:34px 0 40px;}
+    .belief-grid{margin-top:34px;}
+    .about-copy{margin-top:16px!important;}
+    footer.site{padding:34px 0 30px;}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important;}
@@ -638,7 +694,7 @@
       <span class="rot-word">your data.</span>
       <span class="rot-word">your people.</span>
     </span></span></h1>
-    <p class="lede reveal d2">Welcome to the studio. We're a boutique strategy consultancy dedicated to delivering practical solutions for brands, organizations, startups, and leaders.</p>
+    <p class="lede reveal d2">Welcome to the studio — we're a boutique strategy consultancy dedicated to solutions for brands, organizations, startups, foundations, and leaders.</p>
     <div class="hero-cta-row reveal d3">
       <a href="#contact" class="btn btn-primary">Work with us <span class="arr">→</span></a>
       <a href="#capabilities" class="btn btn-ghost">What we do</a>
@@ -651,26 +707,31 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow reveal">Who we are</span>
-      <h2 class="reveal d1">A little better than the median <span class="ital">isn't good enough.</span></h2>
-      <p class="intro reveal d2">Incite Studio is a boutique data science and research consultancy.</p>
-      <p class="intro reveal d2">We're a team of strategists, data scientists, researchers, and engineers. We help our clients with practical solutions, platform strategy, and research to protect and strengthen brand reputation, get ahead of the news cycle, and shift public opinion. We believe effective persuasion is equal parts creativity and analysis — a unique approach that's helped our partners, from Fortune 100 tech to civic organizations, foundations, investors, and others with a story to tell, create, test, and better understand the effectiveness of digital media.</p>
+      <h2 class="reveal d1">Creative solutions, <span class="ital">backed by science.</span></h2>
+      <img class="about-mark reveal d1" src="assets/creative-science.png" alt="" aria-hidden="true">
+      <div class="about-copy">
+      <p class="intro reveal d2">Our systems turn experimentation into durable advantage.</p>
+      <p class="intro reveal d2">We believe effective persuasion is equal parts creativity and analysis, an approach that's helped our clients — from Fortune 100 tech to civic organizations, foundations, and investors — create, test, and understand the effectiveness of paid media, strengthen brand reputation, get ahead of a news cycle, and even shift public opinion.</p>
+      <p class="intro reveal d2">We help our clients identify and grow their own influence across audiences, voter groups, and markets with program strategy and organizational design, agile content development and testing, custom data infrastructure, persuasiveness models, platform recommendations, research programs, and more.</p>
+      <p class="intro reveal d2">Our team understands the pressure organizations are under as the media landscape continues to evolve. As leaders within some of these organizations ourselves, we responded by building the systems and strategies we now share with our clients. We'd love to hear how we can help you and your teams accelerate growth and meaningfully influence attitudes, opinions, and behavior.</p>
+      </div>
     </div>
 
     <div class="belief-grid">
       <div class="belief reveal">
         <div class="n">01</div>
-        <h3>Humility, then rigor</h3>
-        <p>Influence models for effective persuasion.</p>
+        <h3>Influence &gt; Engagement</h3>
+        <p>Influence models for effective persuasion. Data science for modern research.</p>
       </div>
       <div class="belief reveal d1">
         <div class="n">02</div>
-        <h3>Why, not just what</h3>
-        <p>Understand the mechanism, not just the winner.</p>
+        <h3>Understand the mechanism</h3>
+        <p>Not just the winner.</p>
       </div>
       <div class="belief reveal d2">
         <div class="n">03</div>
-        <h3>Knowledge that compounds</h3>
-        <p>Meta-analysis and measurement for knowledge that compounds.</p>
+        <h3>Smarter over time</h3>
+        <p>Meta-analysis, machine learning, and persuasiveness assessments that save time, money, and creative energy.</p>
       </div>
     </div>
   </div>
@@ -696,8 +757,8 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow reveal">What we do</span>
-      <h2 class="reveal d1">Strategy, backed by <span class="ital">the tools to deliver.</span></h2>
-      <p class="intro reveal d2">Engagements are built around what you need to know. They often include:</p>
+      <h2 class="reveal d1">Strategy, <span class="ital">backed by science.</span></h2>
+      <p class="intro reveal d2">Engagements are tailored to organizational needs, resources, and goals. Contact us to learn more about how we might work together. Our capabilities include:</p>
     </div>
 
     <div class="cap-grid">
@@ -711,7 +772,7 @@
       <div class="cap reveal d1">
         <div class="ix">02</div>
         <div>
-          <h3>Research &amp; analytics programs</h3>
+          <h3>Research, analytics, &amp; agile content production programs</h3>
           <p>Develop or redefine how your organization creates, tests, and measures creative content and message effectiveness.</p>
         </div>
       </div>
@@ -741,6 +802,13 @@
         <div>
           <h3>Data infrastructure</h3>
           <p>The systems that make all of it repeatable.</p>
+        </div>
+      </div>
+      <div class="cap reveal">
+        <div class="ix">07</div>
+        <div>
+          <h3>Agile content development &amp; testing</h3>
+          <p>Integrated with persuasion testing: faster production timelines, diversified content, and data-backed insights that improve over time across cycles.</p>
         </div>
       </div>
     </div>
@@ -795,25 +863,26 @@
     </div>
 
     <div class="research reveal">
-      <div class="research-tag">Featured research</div>
-      <p class="research-lead">The first academic field study on how digital creators persuade. Our founder co-authored new research with Columbia showing that cultural creators had an outsized effect on public perception in 2024.</p>
-      <div class="research-as">
-        <div class="ra-item">
-          <span class="ra-label">As previewed in</span>
-          <img class="ra-wired" src="assets/wired-white.png" alt="WIRED">
+      <div class="research-body">
+        <div class="research-tag">Featured research</div>
+        <p class="research-lead">The first academic field study on how digital creators persuade. Incite Studio founder co-authored new research with Columbia showing that cultural creators had an outsized effect on public perception in 2024.</p>
+        <div class="research-as">
+          <div class="ra-item">
+            <span class="ra-label">In partnership with</span>
+            <a class="ra-bii" href="https://www.betterinternetinitiative.org" target="_blank" rel="noopener" aria-label="Better Internet Initiative">
+              <img src="assets/bii.png" alt="Better Internet Initiative">
+            </a>
+          </div>
         </div>
-        <div class="ra-item">
-          <span class="ra-label">In partnership with</span>
-          <a class="ra-bii" href="https://www.betterinternetinitiative.org" target="_blank" rel="noopener" aria-label="Better Internet Initiative">
-            <img src="assets/bii.png" alt="Better Internet Initiative">
-          </a>
+        <div class="research-links">
+          <a href="https://www.wired.com/story/the-most-powerful-politics-influencers-barely-post-about-politics/" target="_blank" rel="noopener">Read the preview <span class="arr">→</span></a>
+          <a href="https://arxiv.org/abs/2512.15401" target="_blank" rel="noopener">Read the full paper <span class="arr">→</span></a>
         </div>
+        <p class="research-credit">With Nathaniel Lubin, Tiffany Fisher-Love, and Columbia researchers John Marshall, Eunji Kim, and Kirill Chmel.</p>
       </div>
-      <div class="research-links">
-        <a href="https://www.wired.com/story/the-most-powerful-politics-influencers-barely-post-about-politics/" target="_blank" rel="noopener">Read the preview <span class="arr">→</span></a>
-        <a href="https://arxiv.org/abs/2512.15401" target="_blank" rel="noopener">Read the full paper <span class="arr">→</span></a>
-      </div>
-      <p class="research-credit">With Nathaniel Lubin, Tiffany Fisher-Love, and Columbia researchers John Marshall, Eunji Kim, and Kirill Chmel.</p>
+      <a class="research-media" href="https://www.wired.com/story/the-most-powerful-politics-influencers-barely-post-about-politics/" target="_blank" rel="noopener" aria-label="Read the WIRED article">
+        <img src="assets/wired-article.png" alt="WIRED — The Most Powerful Politics Influencers Barely Post About Politics">
+      </a>
     </div>
   </div>
 </section>
@@ -835,7 +904,7 @@
       </div>
       <div class="member reveal d1">
         <div class="mhead"><h4>Martha Patzer</h4></div>
-        <div class="mrole">Data &amp; Analytics</div>
+        <div class="mrole">Senior Advisor</div>
         <p>Emerging-tech strategist. Formerly Vox Media, Cloaked, and NeevaAI (acquired by Snowflake).</p>
       </div>
       <div class="member reveal d2">
@@ -918,7 +987,7 @@
               </select>
             </div>
           </div>
-          <button type="submit" class="form-submit">Contact us →</button>
+          <button type="submit" class="form-submit">Submit →</button>
         </form>
         <div class="form-success" id="formSuccess">
           <div class="big">All set.</div>
@@ -1043,7 +1112,7 @@
     })
     .catch(() => {
       formBtn.disabled = false;
-      formBtn.textContent = 'Contact us →';
+      formBtn.textContent = 'Submit →';
       alert("Something went wrong sending your message. Please email mohit@incite.studio directly.");
     });
   });
